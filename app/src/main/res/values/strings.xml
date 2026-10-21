@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DioHunter</string>
+    <string name="start_capture">Start hunt</string>
+    <string name="stop_capture">Stop hunt</string>
+    <string name="clear">Clear</string>
+    <string name="export">Export JSON</string>
+    <string name="filter_hint">Filter host / path / method</string>
+    <string name="vpn_permission">VPN permission required to capture device traffic</string>
+    <string name="empty">No endpoints yet.\nPick a target app, Start hunt, use the app.</string>
+    <string name="notif_title">DioHunter capturing</string>
+    <string name="notif_text">Local VPN — endpoints logged</string>
+</resources>
