@@ -20,30 +20,30 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      # v4 default no longer installs removed 'tools' package (fixes sdkmanager exit 1)
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
         with:
-          packages: tools platform-tools platforms;android-35 build-tools;35.0.0
-          accept-android-sdk-licenses: true
+          packages: platform-tools
+
+      - name: Install Android platform 35 + build-tools
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Ensure Gradle wrapper jar
         run: |
           set -e
-          chmod +x gradlew || true
+          mkdir -p gradle/wrapper
           if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
-            echo "Downloading gradle-wrapper.jar"
-            mkdir -p gradle/wrapper
             curl -fsSL -o gradle/wrapper/gradle-wrapper.jar \
-              "https://github.com/gradle/gradle/raw/v8.9.0/gradle/wrapper/gradle-wrapper.jar"
+              "https://raw.githubusercontent.com/gradle/gradle/v8.9.0/gradle/wrapper/gradle-wrapper.jar"
           fi
-          ls -la gradle/wrapper/
           chmod +x gradlew
+          ls -la gradle/wrapper/
 
       - name: Build debug APK
-        env:
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
-        run: |
-          ./gradlew :app:assembleDebug --stacktrace --no-daemon
+        run: ./gradlew :app:assembleDebug --stacktrace --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
